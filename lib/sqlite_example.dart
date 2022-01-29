@@ -50,22 +50,11 @@ class _SqliteExampleState extends State<SqliteExample> {
   ListTile _itemToListTile(TodoItem todo) => ListTile(
     title: Text(
       todo.content,
-      style: TextStyle(
-        fontStyle: todo.isDone ? FontStyle.italic : null,
-        color: todo.isDone ? Colors.grey : null,
-        decoration: todo.isDone ? TextDecoration.lineThrough : null,
-      ),
     ),
     subtitle: Text('id=${todo.id}\ncreated at ${todo.createdAt}'),
     isThreeLine: true,
-    leading: IconButton(
-      icon: Icon(
-        todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
-      ),
-      onPressed: () async {
-        await _databaseController.toggleTodoItem(todo);
-        _updateUI();
-      },
+    leading: Icon(
+      Icons.check_box,
     ),
     trailing: IconButton(
       icon: const Icon(Icons.delete),

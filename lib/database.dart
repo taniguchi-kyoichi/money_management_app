@@ -28,7 +28,6 @@ class DatabaseController{
           '''
         CREATE TABLE $kDbTableName(
           id INTEGER PRIMARY KEY, 
-          isDone BIT NOT NULL,
           content TEXT,
           createdAt INT)
         ''',
@@ -54,29 +53,16 @@ class DatabaseController{
         final int id = await txn.rawInsert(
           '''
           INSERT INTO $kDbTableName
-            (content, isDone, createdAt)
+            (content, createdAt)
           VALUES
             (
               "${todo.content}",
-              ${todo.isDone ? 1 : 0}, 
               ${todo.createdAt.millisecondsSinceEpoch}
             )''',
         );
         print('Inserted todo item with id=$id.');
       },
     );
-  }
-
-  // Updates records in the db table.
-  Future<void> toggleTodoItem(TodoItem todo) async {
-    final int count = await this.db.rawUpdate(
-      /*sql=*/ '''
-      UPDATE $kDbTableName
-      SET isDone = ?
-      WHERE id = ?''',
-      /*args=*/ [if (todo.isDone) 0 else 1, todo.id],
-    );
-    print('Updated $count records in db.');
   }
 
   // Deletes records in the db table.
