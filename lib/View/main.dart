@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money_management_app/database.dart';
-import 'package:money_management_app/sqlite_example.dart';
+import 'package:money_management_app/Model/database.dart';
+import 'package:money_management_app/View/sqlite_example.dart';
+import 'package:money_management_app/View/tab_view.dart';
 
 import 'home.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: SqliteExample()
+      home: TabsExample(),
     );
   }
 }

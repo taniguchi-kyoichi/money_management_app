@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_management_app/database.dart';
+import 'package:money_management_app/Model/database.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);

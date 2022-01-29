@@ -1,9 +1,9 @@
 import 'package:english_words/english_words.dart' as english_words;
 import 'package:flutter/material.dart';
-import 'package:money_management_app/database.dart';
+import 'package:money_management_app/Model/database.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'db_data.dart';
+import '../Model/db_data.dart';
 
 class SqliteExample extends StatefulWidget {
   const SqliteExample({Key? key}) : super(key: key);
@@ -53,9 +53,7 @@ class _SqliteExampleState extends State<SqliteExample> {
     ),
     subtitle: Text('id=${todo.id}\ncreated at ${todo.createdAt}'),
     isThreeLine: true,
-    leading: Icon(
-      Icons.check_box,
-    ),
+    leading: Text('${todo.price}'),
     trailing: IconButton(
       icon: const Icon(Icons.delete),
       onPressed: () async {
@@ -70,6 +68,7 @@ class _SqliteExampleState extends State<SqliteExample> {
       onPressed: () async {
         await _databaseController.addTodoItem(
           TodoItem(
+            price: 200,
             content: english_words.generateWordPairs().first.asPascalCase,
             createdAt: DateTime.now(),
           ),

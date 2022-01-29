@@ -28,6 +28,7 @@ class DatabaseController{
           '''
         CREATE TABLE $kDbTableName(
           id INTEGER PRIMARY KEY, 
+          price INTEGER,
           content TEXT,
           createdAt INT)
         ''',
@@ -53,9 +54,10 @@ class DatabaseController{
         final int id = await txn.rawInsert(
           '''
           INSERT INTO $kDbTableName
-            (content, createdAt)
+            (price, content, createdAt)
           VALUES
             (
+              "${todo.price}",
               "${todo.content}",
               ${todo.createdAt.millisecondsSinceEpoch}
             )''',
