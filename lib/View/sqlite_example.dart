@@ -6,7 +6,9 @@ import 'package:sqflite/sqflite.dart';
 import '../Model/db_data.dart';
 
 class SqliteExample extends StatefulWidget {
-  const SqliteExample({Key? key}) : super(key: key);
+  const SqliteExample({Key? key, required this.sum}) : super(key: key);
+
+  final int sum;
 
   @override
   _SqliteExampleState createState() => _SqliteExampleState();

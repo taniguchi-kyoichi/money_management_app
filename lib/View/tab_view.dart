@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:money_management_app/View/home.dart';
+import 'package:money_management_app/View/sqlite_example.dart';
 
 class TabsExample extends StatelessWidget {
   const TabsExample({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+
+    int sum = 30000;
+
+
     final _kTabPages = <Widget>[
-      const Center(child: Icon(Icons.cloud, size: 64.0, color: Colors.teal)),
-      const Center(child: Icon(Icons.alarm, size: 64.0, color: Colors.cyan)),
+      MyHomePage(title: ('title'), sum: sum),
+      SqliteExample(sum: sum),
       const Center(child: Icon(Icons.forum, size: 64.0, color: Colors.blue)),
     ];
     final _kTabs = <Tab>[
@@ -29,8 +36,11 @@ class TabsExample extends StatelessWidget {
             tabs: _kTabs,
           ),
         ),
-        body: TabBarView(
-          children: _kTabPages,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: TabBarView(
+            children: _kTabPages,
+          ),
         ),
       ),
     );

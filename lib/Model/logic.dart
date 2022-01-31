@@ -2,6 +2,8 @@ import 'package:money_management_app/Model/db_data.dart';
 
 class PriceLogic {
 
+
+
  int subtract(int sum, List<TodoItem> todoList) {
    int _todoListSum = 0;
    int result = 0;
