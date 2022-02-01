@@ -1,6 +1,8 @@
 import 'package:english_words/english_words.dart' as english_words;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/Model/database.dart';
+import 'package:money_management_app/view_model/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../Model/db_data.dart';
@@ -19,8 +21,6 @@ class _SqliteExampleState extends State<SqliteExample> {
   late Database _db;
   List<TodoItem> _todos = [];
 
-
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
@@ -32,10 +32,14 @@ class _SqliteExampleState extends State<SqliteExample> {
           );
         }
         return Scaffold(
-          body: ListView(
-            children: this._todos.map(_itemToListTile).toList(),
+          body: Consumer(
+            builder: (context, ref, child) => ListView(
+              children: _todos.map((TodoItem todo) => _itemToListTile(todo, ref)).toList(),
+            ),
           ),
-          floatingActionButton: _buildFloatingActionButton(),
+          floatingActionButton: Consumer(
+              builder: (context, ref, child) =>
+                  _buildFloatingActionButton(ref)),
         );
       },
     );
@@ -49,45 +53,46 @@ class _SqliteExampleState extends State<SqliteExample> {
     });
   }
 
-  ListTile _itemToListTile(TodoItem todo) => ListTile(
-    title: Text(
-      todo.content,
-    ),
-    subtitle: Text('id=${todo.id}\ncreated at ${todo.createdAt}'),
-    isThreeLine: true,
-    leading: Text('${todo.price}'),
-    trailing: IconButton(
-      icon: const Icon(Icons.delete),
-      onPressed: () async {
-        await _databaseController.deleteTodoItem(todo);
-        _updateUI();
-      },
-    ),
-  );
+  ListTile _itemToListTile(TodoItem todo, WidgetRef ref) => ListTile(
+        title: Text(
+          todo.content,
+        ),
+        subtitle: Text('id=${todo.id}\ncreated at ${todo.createdAt}'),
+        isThreeLine: true,
+        leading: Text('${todo.price}'),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () async {
+            await _databaseController.deleteTodoItem(todo);
+            _updateUI();
+            ref.watch(availableMoneyProvider.state).state =
+                ref.watch(availableMoneyProvider) + todo.price;
+          },
+        ),
+      );
 
-  FloatingActionButton _buildFloatingActionButton() {
+  FloatingActionButton _buildFloatingActionButton(WidgetRef ref) {
     return FloatingActionButton(
       onPressed: () async {
-        await _databaseController.addTodoItem(
-          TodoItem(
-            price: 200,
-            content: english_words.generateWordPairs().first.asPascalCase,
-            createdAt: DateTime.now(),
-          ),
+        TodoItem todoItem = TodoItem(
+          price: 200,
+          content: english_words.generateWordPairs().first.asPascalCase,
+          createdAt: DateTime.now(),
         );
+        await _databaseController.addTodoItem(todoItem);
         _updateUI();
+        ref.watch(availableMoneyProvider.state).state =
+            ref.watch(availableMoneyProvider) - todoItem.price;
       },
       child: const Icon(Icons.add),
     );
   }
 
-  Future<bool> _initUI() async{
-
+  Future<bool> _initUI() async {
     await _databaseController.asyncInit();
     _db = _databaseController.db;
     _todos = _databaseController.todos;
 
     return true;
   }
-
 }
