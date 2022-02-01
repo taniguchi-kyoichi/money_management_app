@@ -1,20 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/View/home.dart';
 import 'package:money_management_app/View/event_list_view.dart';
+import 'package:money_management_app/configs/constants.dart';
+import 'package:money_management_app/view_model/view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RootApp extends StatelessWidget {
-  const RootApp({Key? key}) : super(key: key);
+class RootApp extends ConsumerStatefulWidget {
+  final ViewModel viewModel;
+  RootApp(
+      this.viewModel, {
+        Key? key,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<RootApp> createState() => _RootAppState();
+}
+
+class _RootAppState extends ConsumerState<RootApp> {
+  late ViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = widget.viewModel;
+    _viewModel.setRef(ref);
+    Future(() async {
+      await _getPrefItems();
+    }
+    );
+
+  }
+
+  _getPrefItems() async {
+    int result = 0;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    result = prefs.getInt(Constants.availableMoneyPref) ?? 20000;
+    _viewModel.setInit(result);
+  }
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
 
-    int sum = 30000;
-
 
     final _kTabPages = <Widget>[
-      HomeApp(title: ('title'), sum: sum),
-      EventListApp(sum: sum),
+      const HomeApp(),
+      const EventListApp(),
       const Center(child: Icon(Icons.forum, size: 64.0, color: Colors.blue)),
     ];
     final _kTabs = <Tab>[
@@ -26,7 +61,7 @@ class RootApp extends StatelessWidget {
       length: _kTabs.length,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('appbar title'),
+          title: const Text('交際費管理アプリ'),
           backgroundColor: Colors.cyan,
           // If `TabController controller` is not provided, then a
           // DefaultTabController ancestor must be provided instead.

@@ -2,15 +2,18 @@ import 'package:english_words/english_words.dart' as english_words;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/Model/database.dart';
+import 'package:money_management_app/configs/constants.dart';
 import 'package:money_management_app/view_model/provider.dart';
+import 'package:money_management_app/view_model/view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../Model/db_data.dart';
 
 class EventListApp extends StatefulWidget {
-  const EventListApp({Key? key, required this.sum}) : super(key: key);
 
-  final int sum;
+
+  const EventListApp({Key? key}) : super(key: key);
 
   @override
   _EventListAppState createState() => _EventListAppState();
@@ -19,7 +22,8 @@ class EventListApp extends StatefulWidget {
 class _EventListAppState extends State<EventListApp> {
   final DatabaseController _databaseController = DatabaseController();
   late Database _db;
-  List<TodoItem> _todos = [];
+  List<TodoItem> _todoList = [];
+  final ViewModel _viewModel = ViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,9 @@ class _EventListAppState extends State<EventListApp> {
         return Scaffold(
           body: Consumer(
             builder: (context, ref, child) => ListView(
-              children: _todos.map((TodoItem todo) => _itemToListTile(todo, ref)).toList(),
+              children: _todoList
+                  .map((TodoItem todo) => _itemToListTile(todo, ref))
+                  .toList(),
             ),
           ),
           floatingActionButton: Consumer(
@@ -48,9 +54,11 @@ class _EventListAppState extends State<EventListApp> {
   Future<void> _updateUI() async {
     await _databaseController.getTodoItems();
     setState(() {
-      _todos = _databaseController.todos;
+      _todoList = _databaseController.todos;
       _db = _databaseController.db;
     });
+
+
   }
 
   ListTile _itemToListTile(TodoItem todo, WidgetRef ref) => ListTile(
@@ -67,6 +75,8 @@ class _EventListAppState extends State<EventListApp> {
             _updateUI();
             ref.watch(availableMoneyProvider.state).state =
                 ref.watch(availableMoneyProvider) + todo.price;
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setInt(Constants.availableMoneyPref, ref.watch(availableMoneyProvider.state).state);
           },
         ),
       );
@@ -83,6 +93,8 @@ class _EventListAppState extends State<EventListApp> {
         _updateUI();
         ref.watch(availableMoneyProvider.state).state =
             ref.watch(availableMoneyProvider) - todoItem.price;
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt(Constants.availableMoneyPref, ref.watch(availableMoneyProvider.state).state);
       },
       child: const Icon(Icons.add),
     );
@@ -91,7 +103,7 @@ class _EventListAppState extends State<EventListApp> {
   Future<bool> _initUI() async {
     await _databaseController.asyncInit();
     _db = _databaseController.db;
-    _todos = _databaseController.todos;
+    _todoList = _databaseController.todos;
 
     return true;
   }

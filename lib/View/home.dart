@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:money_management_app/configs/constants.dart';
 import 'package:money_management_app/view_model/provider.dart';
+import 'package:money_management_app/view_model/view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeApp extends ConsumerWidget {
-  const HomeApp({Key? key, required this.title, required this.sum})
-      : super(key: key);
-
-  final int sum;
-  final String title;
+class HomeApp extends StatefulWidget {
+  const HomeApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    
-    final availableMoney = ref.watch(availableMoneyProvider);
-    
-    
+  _HomeAppState createState() => _HomeAppState();
+}
+
+class _HomeAppState extends State<HomeApp> {
+
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('残り$availableMoney円'),
+            Consumer(
+                builder: (context, ref, child) =>
+                    Text('${ref.watch(availableMoneyProvider).toInt()}')),
             const TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: '使った金額'),
