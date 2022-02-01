@@ -7,17 +7,17 @@ import 'package:sqflite/sqflite.dart';
 
 import '../Model/db_data.dart';
 
-class SqliteExample extends StatefulWidget {
-  const SqliteExample({Key? key, required this.sum}) : super(key: key);
+class EventListApp extends StatefulWidget {
+  const EventListApp({Key? key, required this.sum}) : super(key: key);
 
   final int sum;
 
   @override
-  _SqliteExampleState createState() => _SqliteExampleState();
+  _EventListAppState createState() => _EventListAppState();
 }
 
-class _SqliteExampleState extends State<SqliteExample> {
-  DatabaseController _databaseController = DatabaseController();
+class _EventListAppState extends State<EventListApp> {
+  final DatabaseController _databaseController = DatabaseController();
   late Database _db;
   List<TodoItem> _todos = [];
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money_management_app/View/home.dart';
-import 'package:money_management_app/View/sqlite_example.dart';
+import 'package:money_management_app/View/event_list_view.dart';
 
-class TabsExample extends StatelessWidget {
-  const TabsExample({Key? key}) : super(key: key);
+class RootApp extends StatelessWidget {
+  const RootApp({Key? key}) : super(key: key);
 
 
   @override
@@ -13,14 +13,14 @@ class TabsExample extends StatelessWidget {
 
 
     final _kTabPages = <Widget>[
-      MyHomePage(title: ('title'), sum: sum),
-      SqliteExample(sum: sum),
+      HomeApp(title: ('title'), sum: sum),
+      EventListApp(sum: sum),
       const Center(child: Icon(Icons.forum, size: 64.0, color: Colors.blue)),
     ];
     final _kTabs = <Tab>[
-      const Tab(icon: Icon(Icons.cloud), text: 'Tab1'),
-      const Tab(icon: Icon(Icons.alarm), text: 'Tab2'),
-      const Tab(icon: Icon(Icons.forum), text: 'Tab3'),
+      const Tab(icon: Icon(Icons.home), text: 'ホーム'),
+      const Tab(icon: Icon(Icons.history), text: '履歴'),
+      const Tab(icon: Icon(Icons.settings), text: '設定'),
     ];
     return DefaultTabController(
       length: _kTabs.length,
