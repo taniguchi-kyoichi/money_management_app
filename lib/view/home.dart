@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_management_app/Model/database.dart';
-import 'package:money_management_app/Model/db_data.dart';
+import 'package:money_management_app/model/database.dart';
+import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view_model/provider.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:sqflite/sqflite.dart';

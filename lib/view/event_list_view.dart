@@ -1,15 +1,12 @@
-import 'package:english_words/english_words.dart' as english_words;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_management_app/Model/database.dart';
-import 'package:money_management_app/View/edit_view.dart';
-import 'package:money_management_app/configs/constants.dart';
-import 'package:money_management_app/view_model/provider.dart';
+import 'package:money_management_app/model/database.dart';
+import 'package:money_management_app/model/db_data.dart';
+import 'package:money_management_app/view/edit_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../Model/db_data.dart';
+import 'package:english_words/english_words.dart' as english_word;
 
 class EventListApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -55,9 +52,6 @@ class _EventListAppState extends ConsumerState<EventListApp> {
                   .toList(),
             ),
           ),
-          floatingActionButton: Consumer(
-              builder: (context, ref, child) =>
-                  _buildFloatingActionButton(ref)),
         );
       },
     );
@@ -71,45 +65,32 @@ class _EventListAppState extends ConsumerState<EventListApp> {
     });
   }
 
-  ListTile _itemToListTile(TodoItem todo, WidgetRef ref) {
+  ListTile _itemToListTile(TodoItem todoItem, WidgetRef ref) {
     return ListTile(
-      title: Text(
-        todo.content,
-      ),
-      subtitle: Text('id=${todo.id}\ncreated at ${todo.createdAt}'),
-      isThreeLine: true,
-      leading: Text('${todo.price}'),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () async {
-          await _databaseController.deleteTodoItem(todo);
-          _updateUI();
-          _viewModel.deleteItem(todo);
-        },
-      ),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EditView(ViewModel(), todo),
+        title: Text(
+          todoItem.content,
         ),
-      ),
-    );
-  }
-
-  FloatingActionButton _buildFloatingActionButton(WidgetRef ref) {
-    return FloatingActionButton(
-      onPressed: () async {
-        TodoItem todoItem = TodoItem(
-          price: 200,
-          content: english_words.generateWordPairs().first.asPascalCase,
-          createdAt: DateTime.now(),
-        );
-        await _databaseController.addTodoItem(todoItem);
-        _updateUI();
-        _viewModel.addItem(todoItem);
-      },
-      child: const Icon(Icons.add),
-    );
+        subtitle: Text('id=${todoItem.id}\ncreated at ${todoItem.createdAt}'),
+        isThreeLine: true,
+        leading: Text('${todoItem.price}'),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () async {
+            await _databaseController.deleteTodoItem(todoItem);
+            _updateUI();
+            _viewModel.deleteItem(todoItem);
+          },
+        ),
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditView(ViewModel(), todoItem),
+              ),
+            ).then((value) {
+              setState(() {
+                _updateUI();
+              });
+            }));
   }
 
   Future<bool> _initUI() async {

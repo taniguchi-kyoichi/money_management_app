@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_management_app/Model/database.dart';
-import 'package:money_management_app/Model/db_data.dart';
+import 'package:money_management_app/model/database.dart';
+import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class EditView extends ConsumerStatefulWidget {
   final ViewModel viewModel;
-  final TodoItem todoItem;
+  final TodoItem todo;
 
-  const EditView(this.viewModel, this.todoItem, {
+  const EditView(
+    this.viewModel,
+    this.todo, {
     Key? key,
   }) : super(key: key);
 
@@ -29,7 +31,7 @@ class _EditViewState extends ConsumerState<EditView> {
   @override
   void initState() {
     super.initState();
-    todoItem = widget.todoItem;
+    todoItem = widget.todo;
     _cashController = TextEditingController(text: todoItem.price.toString());
     _contentController = TextEditingController(text: todoItem.content);
     _viewModel = widget.viewModel;
@@ -45,29 +47,33 @@ class _EditViewState extends ConsumerState<EditView> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('編集画面'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('${todoItem.createdAt}'),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: _cashController,
-              onChanged: (String) async {
-                TodoItem newTodo = TodoItem(
-                  id: todoItem.id,
-                    price: int.parse(_cashController.text),
-                    content: todoItem.content, createdAt: todoItem.createdAt);
-                _databaseController.changePrice(newTodo);
-              },
-            ),
-            TextField(
-              controller: _contentController,
-            ),
-          ],
+      child: WillPopScope(
+        onWillPop: () {
+          _viewModel.updateCash(todoItem.price, int.parse(_cashController.text));
+          Navigator.of(context).pop();
+          return Future.value(false);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('編集画面'),
+          ),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('${todoItem.createdAt}'),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _cashController,
+                onChanged: (String) async {
+                    _databaseController.changePrice(todoItem, int.parse(_cashController.text));
+
+                },
+              ),
+              TextField(
+                controller: _contentController,
+              ),
+            ],
+          ),
         ),
       ),
     );
