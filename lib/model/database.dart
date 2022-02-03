@@ -65,6 +65,10 @@ class DatabaseController {
     );
   }
 
+  Future<void> changePrice(TodoItem todo) async {
+    await db.update(kDbTableName, todo.toJsonMap(), where: 'id = ?', whereArgs: [todo.id]);
+  }
+
   // Deletes records in the db table.
   Future<void> deleteTodoItem(TodoItem todo) async {
     await db.rawDelete(
@@ -83,4 +87,7 @@ class DatabaseController {
       await getTodoItems();
     });
   }
+
+
+
 }
