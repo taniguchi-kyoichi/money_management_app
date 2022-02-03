@@ -34,6 +34,7 @@ class DatabaseController {
         );
       },
     );
+    print('init finished');
   }
 
   // Retrieves rows from the db table.

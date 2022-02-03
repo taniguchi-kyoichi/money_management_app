@@ -1,19 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_management_app/configs/constants.dart';
+import 'package:money_management_app/Model/database.dart';
+import 'package:money_management_app/Model/db_data.dart';
 import 'package:money_management_app/view_model/provider.dart';
 import 'package:money_management_app/view_model/view_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
-class HomeApp extends StatefulWidget {
-  const HomeApp({Key? key}) : super(key: key);
+class HomeApp extends ConsumerStatefulWidget {
+  final ViewModel viewModel;
+
+  const HomeApp(
+    this.viewModel, {
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _HomeAppState createState() => _HomeAppState();
+  ConsumerState<HomeApp> createState() => _HomeAppState();
 }
 
-class _HomeAppState extends State<HomeApp> {
+class _HomeAppState extends ConsumerState<HomeApp> {
+  late ViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = widget.viewModel;
+    _viewModel.setRef(ref);
+
+    Future(() async {
+      await _databaseController.initDb();
+    });
+  }
+
+  final DatabaseController _databaseController = DatabaseController();
+  late Database _db;
 
   int _cash = 0;
   String _content = '';
@@ -31,37 +52,48 @@ class _HomeAppState extends State<HomeApp> {
           children: <Widget>[
             Consumer(
                 builder: (context, ref, child) =>
-                    Text('${ref.watch(availableMoneyProvider).toInt()}')),
+                    Text('残り${ref.watch(availableMoneyProvider).toInt()}円')),
             TextField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: '使った金額'),
+              decoration: const InputDecoration(labelText: '使った金額'),
               controller: _cashController,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly,
               ],
             ),
             TextField(
-              decoration: InputDecoration(labelText: '内容'),
+              decoration: const InputDecoration(labelText: '内容'),
               controller: _contentController,
             ),
             ElevatedButton(
                 onPressed: () {
-                  if (_contentController.text != '' && _cashController.text != '') {
-                    _cash = int.parse(_cashController.text);
-                    _content = _contentController.text;
-                    print('$_cash');
-                    print(_content);
-                    _cashController.text = '';
-                    _contentController.text = '';
-                  } else {
-                    // none
-                  }
-
+                  buttonTapped();
                 },
-                child: Text('保存'))
+                child: const Text('保存'))
           ],
         ),
       ),
     );
+  }
+
+  buttonTapped() async {
+    if (_contentController.text != '' && _cashController.text != '') {
+      _cash = int.parse(_cashController.text);
+      _content = _contentController.text;
+      print('$_cash');
+      print(_content);
+      _cashController.text = '';
+      _contentController.text = '';
+
+      TodoItem todoItem = TodoItem(
+        price: _cash,
+        content: _content,
+        createdAt: DateTime.now(),
+      );
+      await _databaseController.addTodoItem(todoItem);
+      _viewModel.addItem(todoItem);
+    } else {
+      // none
+    }
   }
 }

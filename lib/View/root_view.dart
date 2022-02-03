@@ -8,9 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class RootApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
-  RootApp(
-      this.viewModel, {
-        Key? key,
+
+  const RootApp(
+    this.viewModel, {
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -27,9 +28,7 @@ class _RootAppState extends ConsumerState<RootApp> {
     _viewModel.setRef(ref);
     Future(() async {
       await _getPrefItems();
-    }
-    );
-
+    });
   }
 
   _getPrefItems() async {
@@ -39,17 +38,11 @@ class _RootAppState extends ConsumerState<RootApp> {
     _viewModel.setInit(result);
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
-
     final _kTabPages = <Widget>[
-      const HomeApp(),
-      const EventListApp(),
+      HomeApp(ViewModel()),
+      EventListApp(ViewModel()),
       const Center(child: Icon(Icons.forum, size: 64.0, color: Colors.blue)),
     ];
     final _kTabs = <Tab>[

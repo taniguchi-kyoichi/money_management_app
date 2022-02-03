@@ -2,6 +2,7 @@ import 'package:english_words/english_words.dart' as english_words;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/Model/database.dart';
+import 'package:money_management_app/View/edit_view.dart';
 import 'package:money_management_app/configs/constants.dart';
 import 'package:money_management_app/view_model/provider.dart';
 import 'package:money_management_app/view_model/view_model.dart';
@@ -10,20 +11,31 @@ import 'package:sqflite/sqflite.dart';
 
 import '../Model/db_data.dart';
 
-class EventListApp extends StatefulWidget {
+class EventListApp extends ConsumerStatefulWidget {
+  final ViewModel viewModel;
 
-
-  const EventListApp({Key? key}) : super(key: key);
+  const EventListApp(
+    this.viewModel, {
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _EventListAppState createState() => _EventListAppState();
+  ConsumerState<EventListApp> createState() => _EventListAppState();
 }
 
-class _EventListAppState extends State<EventListApp> {
+class _EventListAppState extends ConsumerState<EventListApp> {
+  late ViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = widget.viewModel;
+    _viewModel.setRef(ref);
+  }
+
   final DatabaseController _databaseController = DatabaseController();
   late Database _db;
   List<TodoItem> _todoList = [];
-  final ViewModel _viewModel = ViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -57,29 +69,32 @@ class _EventListAppState extends State<EventListApp> {
       _todoList = _databaseController.todos;
       _db = _databaseController.db;
     });
-
-
   }
 
-  ListTile _itemToListTile(TodoItem todo, WidgetRef ref) => ListTile(
-        title: Text(
-          todo.content,
+  ListTile _itemToListTile(TodoItem todo, WidgetRef ref) {
+    return ListTile(
+      title: Text(
+        todo.content,
+      ),
+      subtitle: Text('id=${todo.id}\ncreated at ${todo.createdAt}'),
+      isThreeLine: true,
+      leading: Text('${todo.price}'),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: () async {
+          await _databaseController.deleteTodoItem(todo);
+          _updateUI();
+          _viewModel.deleteItem(todo);
+        },
+      ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditView(ViewModel(), todo),
         ),
-        subtitle: Text('id=${todo.id}\ncreated at ${todo.createdAt}'),
-        isThreeLine: true,
-        leading: Text('${todo.price}'),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () async {
-            await _databaseController.deleteTodoItem(todo);
-            _updateUI();
-            ref.watch(availableMoneyProvider.state).state =
-                ref.watch(availableMoneyProvider) + todo.price;
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setInt(Constants.availableMoneyPref, ref.watch(availableMoneyProvider.state).state);
-          },
-        ),
-      );
+      ),
+    );
+  }
 
   FloatingActionButton _buildFloatingActionButton(WidgetRef ref) {
     return FloatingActionButton(
@@ -91,10 +106,7 @@ class _EventListAppState extends State<EventListApp> {
         );
         await _databaseController.addTodoItem(todoItem);
         _updateUI();
-        ref.watch(availableMoneyProvider.state).state =
-            ref.watch(availableMoneyProvider) - todoItem.price;
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setInt(Constants.availableMoneyPref, ref.watch(availableMoneyProvider.state).state);
+        _viewModel.addItem(todoItem);
       },
       child: const Icon(Icons.add),
     );
