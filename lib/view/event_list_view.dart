@@ -6,7 +6,6 @@ import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view/edit_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:english_words/english_words.dart' as english_word;
 
 class EventListApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -48,7 +47,7 @@ class _EventListAppState extends ConsumerState<EventListApp> {
           body: Consumer(
             builder: (context, ref, child) => ListView(
               children: _todoList
-                  .map((TodoItem todo) => _itemToListTile(todo, ref))
+                  .map((TodoItem todo) => _itemToListTile(todo))
                   .toList(),
             ),
           ),
@@ -65,7 +64,7 @@ class _EventListAppState extends ConsumerState<EventListApp> {
     });
   }
 
-  ListTile _itemToListTile(TodoItem todoItem, WidgetRef ref) {
+  ListTile _itemToListTile(TodoItem todoItem) {
     return ListTile(
         title: Text(
           todoItem.content,

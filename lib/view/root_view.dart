@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/View/home.dart';
 import 'package:money_management_app/View/event_list_view.dart';
 import 'package:money_management_app/configs/constants.dart';
+import 'package:money_management_app/view/settings_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,7 +44,7 @@ class _RootAppState extends ConsumerState<RootApp> {
     final _kTabPages = <Widget>[
       HomeApp(ViewModel()),
       EventListApp(ViewModel()),
-      const Center(child: Icon(Icons.forum, size: 64.0, color: Colors.blue)),
+      SettingsApp(ViewModel()),
     ];
     final _kTabs = <Tab>[
       const Tab(icon: Icon(Icons.home), text: 'ホーム'),
