@@ -67,11 +67,11 @@ class _EventListAppState extends ConsumerState<EventListApp> {
   ListTile _itemToListTile(TodoItem todoItem) {
     return ListTile(
         title: Text(
-          todoItem.content,
+          '${todoItem.price}円',
         ),
-        subtitle: Text('id=${todoItem.id}\ncreated at ${todoItem.createdAt}'),
+        subtitle: Text(todoItem.content),
         isThreeLine: true,
-        leading: Text('${todoItem.price}'),
+        leading: Text('${todoItem.createdAt.month}月${todoItem.createdAt.day}日'),
         trailing: IconButton(
           icon: const Icon(Icons.delete),
           onPressed: () async {

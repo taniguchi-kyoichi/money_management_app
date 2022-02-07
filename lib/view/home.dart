@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
-import 'package:money_management_app/view_model/provider.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -50,9 +49,7 @@ class _HomeAppState extends ConsumerState<HomeApp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Consumer(
-                builder: (context, ref, child) =>
-                    Text('残り${ref.watch(availableMoneyProvider).toInt()}円')),
+            Text('残り${_viewModel.availableMoney}円'),
             TextField(
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(labelText: '使った金額'),

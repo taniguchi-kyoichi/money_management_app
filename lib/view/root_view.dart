@@ -35,7 +35,7 @@ class _RootAppState extends ConsumerState<RootApp> {
   _getPrefItems() async {
     int result = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    result = prefs.getInt(Constants.availableMoneyPref) ?? 20000;
+    result = prefs.getInt(Constants.availableMoneyPref) ?? _viewModel.aimMoney;
     _viewModel.setInit(result);
   }
 
