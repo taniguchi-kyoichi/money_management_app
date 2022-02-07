@@ -93,6 +93,13 @@ class DatabaseController {
     });
   }
 
+  Future<void> deleteAll() async{
+    await db.rawDelete(
+      '''
+        DELETE FROM $kDbTableName
+      ''',
+    );
+  }
 
 
 }

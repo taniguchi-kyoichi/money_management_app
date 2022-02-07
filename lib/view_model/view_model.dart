@@ -40,5 +40,12 @@ class ViewModel {
     prefs.setInt(Constants.availableMoneyPref,
         _ref.watch(availableMoneyProvider.state).state);
   }
+  void resetRef() async{
+    _ref.watch(availableMoneyProvider.state).state = 20000;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(Constants.availableMoneyPref,
+        _ref.watch(availableMoneyProvider.state).state);
+  }
+
 
 }
