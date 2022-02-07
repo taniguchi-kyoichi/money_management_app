@@ -30,16 +30,13 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
     _viewModel = widget.viewModel;
     _viewModel.setRef(ref);
 
-
     Future(() async {
       await _databaseController.initDb();
-      int aimMoney = await _preferences.getAimMoneyPref() ?? Constants.initAimMoney;
-      _aimMoneyController = TextEditingController(
-          text: aimMoney.toString());
+      int aimMoney =
+          await _preferences.getAimMoneyPref() ?? Constants.initAimMoney;
+      _aimMoneyController = TextEditingController(text: aimMoney.toString());
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +44,7 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
       body: ListView(
         children: <Widget>[
           setInitialStateButton(),
-          Divider(
+          const Divider(
             thickness: 3,
             height: 50,
             indent: 30,
@@ -60,76 +57,84 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
   }
 
   Widget setInitialStateButton() {
-    return TextButton(
-        child: Text('目標金額を設定'),
-        onPressed: () async {
-          var result = await showDialog<int>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('目標金額'),
-                  content: TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _aimMoneyController,
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(0),
-                      child: Text('キャンセル'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(1),
-                      child: Text('OK'),
-                    ),
-                  ],
-                );
-              });
-          if (result == 1) {
-            int newData = int.parse(_aimMoneyController.text);
-            _viewModel.updateAvailableMoneyProvider(newData, _viewModel.aimMoney);
-            _viewModel.setAimMoney(newData);
-            _preferences.setAimMoneyPref(newData);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
+      child: TextButton(
+        child: const Text('目標金額を設定'),
+        onPressed: setInitialStateDialogWidget,
+      ),
+    );
+  }
 
-          } else {
-            // none
-          }
+  Future<Widget?> setInitialStateDialogWidget() async {
+    var result = await showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('目標金額'),
+            content: TextField(
+              keyboardType: TextInputType.number,
+              controller: _aimMoneyController,
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(0),
+                child: const Text('キャンセル'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(1),
+                child: const Text('OK'),
+              ),
+            ],
+          );
         });
+    if (result == 1) {
+      int newData = int.parse(_aimMoneyController.text);
+      _viewModel.updateAvailableMoneyProvider(newData, _viewModel.aimMoney);
+      _viewModel.setAimMoney(newData);
+      _preferences.setAimMoneyPref(newData);
+    } else {
+      // none
+    }
   }
 
   Widget resetButton() {
-    return TextButton(
-      style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
+      child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+        ),
+        onPressed: () async {
+          var result = await showDialog<int>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('確認'),
+                content: const Text('本当に削除しますか？'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(1),
+                    child: const Text('キャンセル'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(0),
+                    child: const Text('削除する'),
+                  ),
+                ],
+              );
+            },
+          );
+          if (result == 0) {
+            _viewModel.resetRef();
+            _databaseController.deleteAll();
+          } else {
+            // none
+          }
+        },
+        child: const Text('記録を削除'),
       ),
-      onPressed: () async {
-        var result = await showDialog<int>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('確認'),
-              content: const Text('本当に削除しますか？'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(1),
-                  child: const Text('キャンセル'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(0),
-                  child: const Text('削除する'),
-                ),
-              ],
-            );
-          },
-        );
-        if (result == 0) {
-          _viewModel.resetRef();
-          _databaseController.deleteAll();
-        } else {
-          // none
-        }
-      },
-      child: const Text('記録を削除'),
     );
   }
 }

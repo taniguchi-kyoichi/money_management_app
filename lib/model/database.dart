@@ -34,7 +34,6 @@ class DatabaseController {
         );
       },
     );
-    print('init finished');
   }
 
   // Retrieves rows from the db table.
@@ -71,7 +70,8 @@ class DatabaseController {
         price: price,
         content: oldItem.content,
         createdAt: oldItem.createdAt);
-    await db.update(kDbTableName, newTodo.toJsonMap(), where: 'id = ?', whereArgs: [oldItem.id]);
+    await db.update(kDbTableName, newTodo.toJsonMap(),
+        where: 'id = ?', whereArgs: [oldItem.id]);
   }
 
   // Deletes records in the db table.
@@ -93,13 +93,11 @@ class DatabaseController {
     });
   }
 
-  Future<void> deleteAll() async{
+  Future<void> deleteAll() async {
     await db.rawDelete(
       '''
         DELETE FROM $kDbTableName
       ''',
     );
   }
-
-
 }

@@ -7,13 +7,14 @@ import 'package:money_management_app/view_model/provider.dart';
 class ViewModel {
   late WidgetRef _ref;
 
-  MySharedPreferences _preferences = MySharedPreferences();
+  final MySharedPreferences _preferences = MySharedPreferences();
 
   void setRef(WidgetRef ref) {
     _ref = ref;
   }
 
   get availableMoney => _ref.watch(availableMoneyProvider).toInt();
+
   get aimMoney => _ref.watch(aimMoneyProvider).toInt();
 
   void setInit(int initMoney) {
@@ -27,26 +28,28 @@ class ViewModel {
   void addItem(TodoItem todoItem) async {
     _ref.watch(availableMoneyProvider.state).state =
         _ref.watch(availableMoneyProvider) - todoItem.price;
-    _preferences.setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
+    _preferences
+        .setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
   }
-  
 
   void deleteItem(TodoItem todoItem) async {
     _ref.watch(availableMoneyProvider.state).state =
         _ref.watch(availableMoneyProvider) + todoItem.price;
-    _preferences.setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
+    _preferences
+        .setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
   }
 
   void updateAvailableMoneyProvider(int add, int subtract) async {
     _ref.watch(availableMoneyProvider.state).state =
         _ref.watch(availableMoneyProvider) + add - subtract;
-    _preferences.setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
+    _preferences
+        .setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
   }
-  void resetRef() async{
+
+  void resetRef() async {
     _ref.watch(aimMoneyProvider.state).state = Constants.initAimMoney;
     _ref.watch(availableMoneyProvider.state).state = Constants.initAimMoney;
-    _preferences.setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
+    _preferences
+        .setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
   }
-
-
 }

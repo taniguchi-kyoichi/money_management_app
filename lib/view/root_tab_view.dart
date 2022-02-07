@@ -47,7 +47,7 @@ class _RootAppState extends ConsumerState<RootApp> {
       SettingsApp(ViewModel()),
     ];
     final _kTabs = <Tab>[
-      const Tab(icon: Icon(Icons.home), text: 'ホーム'),
+      const Tab(icon: Icon(Icons.home), text: 'ホーム',),
       const Tab(icon: Icon(Icons.history), text: '履歴'),
       const Tab(icon: Icon(Icons.settings), text: '設定'),
     ];
@@ -55,14 +55,13 @@ class _RootAppState extends ConsumerState<RootApp> {
       length: _kTabs.length,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('交際費管理アプリ'),
-          backgroundColor: Colors.cyan,
-          // If `TabController controller` is not provided, then a
-          // DefaultTabController ancestor must be provided instead.
-          // Another way is to use a self-defined controller, c.f. "Bottom tab
-          // bar" example.
-          bottom: TabBar(
-            tabs: _kTabs,
+          flexibleSpace: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              TabBar(
+                tabs: _kTabs,
+              ),
+            ],
           ),
         ),
         body: GestureDetector(

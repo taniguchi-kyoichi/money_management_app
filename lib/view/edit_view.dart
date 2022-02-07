@@ -49,7 +49,8 @@ class _EditViewState extends ConsumerState<EditView> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: WillPopScope(
         onWillPop: () {
-          _viewModel.updateAvailableMoneyProvider(todoItem.price, int.parse(_cashController.text));
+          _viewModel.updateAvailableMoneyProvider(
+              todoItem.price, int.parse(_cashController.text));
           Navigator.of(context).pop();
           return Future.value(false);
         },
@@ -64,9 +65,9 @@ class _EditViewState extends ConsumerState<EditView> {
               TextField(
                 keyboardType: TextInputType.number,
                 controller: _cashController,
-                onChanged: (String) async {
-                    _databaseController.changePrice(todoItem, int.parse(_cashController.text));
-
+                onChanged: (_) async {
+                  _databaseController.changePrice(
+                      todoItem, int.parse(_cashController.text));
                 },
               ),
               TextField(
