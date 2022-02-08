@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
+import 'package:money_management_app/model/my_shared_preferences.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
@@ -21,16 +22,39 @@ class HomeApp extends ConsumerStatefulWidget {
 
 class _HomeAppState extends ConsumerState<HomeApp> {
   late ViewModel _viewModel;
+  final MySharedPreferences _preferences = MySharedPreferences();
+  final DateTime _currentTime = DateTime.now();
+  int _leftDays = 0;
 
   @override
   void initState() {
     super.initState();
     _viewModel = widget.viewModel;
     _viewModel.setRef(ref);
+    _leftDays = DateTime(_currentTime.year, _currentTime.month + 1, 0).day - _currentTime.day + 1;
 
     Future(() async {
       await _databaseController.initDb();
+      await compareDate();
+
     });
+  }
+
+  Future<void> compareDate() async {
+    DateTime previousTime;
+    try{
+      previousTime = DateTime.parse(_preferences.getCurrentTimePref().toString());
+    } catch(_) {
+      previousTime = DateTime.now();
+    }
+
+
+    if (previousTime.month != _currentTime.month) {
+      _viewModel.setInit(_viewModel.aimMoney);
+    } else {
+      // none
+    }
+
   }
 
   final DatabaseController _databaseController = DatabaseController();
@@ -41,7 +65,7 @@ class _HomeAppState extends ConsumerState<HomeApp> {
   final _cashController = TextEditingController();
   final _contentController = TextEditingController();
 
-  final formatter = NumberFormat("#,###");
+  final numberFormatter = NumberFormat("#,###");
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +81,7 @@ class _HomeAppState extends ConsumerState<HomeApp> {
               ),
             ),
             Text(
-              '残り${formatter.format(_viewModel.availableMoney)}円',
+              '残り$_leftDays日で${numberFormatter.format(_viewModel.availableMoney)}円',
               style: const TextStyle(fontSize: 30),
             ),
             const Padding(padding: EdgeInsets.all(20)),

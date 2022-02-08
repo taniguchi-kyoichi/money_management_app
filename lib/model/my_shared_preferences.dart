@@ -13,6 +13,11 @@ class MySharedPreferences{
     return prefs.getInt(Constants.aimMoneyPref);
   }
 
+  Future<int?> getCurrentTimePref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(Constants.currentTimePref);
+  }
+
   setAvailableMoneyPref(int newData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(Constants.availableMoneyPref, newData);
@@ -22,5 +27,10 @@ class MySharedPreferences{
   setAimMoneyPref(int newData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(Constants.aimMoneyPref, newData);
+  }
+
+  setCurrentTimePref(int newData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(Constants.currentTimePref, newData);
   }
 }
