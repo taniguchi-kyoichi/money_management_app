@@ -89,6 +89,7 @@ class _HomeAppState extends ConsumerState<HomeApp> {
               ),
             ),
             OutlinedButton(
+
               onPressed: buttonTapped,
               child: const Text('保存',
                   style: TextStyle(
@@ -96,6 +97,7 @@ class _HomeAppState extends ConsumerState<HomeApp> {
                   )),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(260, 60),
+                primary: Colors.blue,
               ),
             ),
             const Padding(

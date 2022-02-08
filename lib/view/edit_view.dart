@@ -61,17 +61,32 @@ class _EditViewState extends ConsumerState<EditView> {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('${todoItem.createdAt}'),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _cashController,
-                onChanged: (_) async {
-                  _databaseController.changePrice(
-                      todoItem, int.parse(_cashController.text));
-                },
+              Text(
+                '${todoItem.createdAt.month}月${todoItem.createdAt.day}日',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
-              TextField(
-                controller: _contentController,
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    suffix: Text('円'),
+                  ),
+                  keyboardType: TextInputType.number,
+                  controller: _cashController,
+                  onChanged: (_) async {
+                    _databaseController.changePrice(
+                        todoItem, int.parse(_cashController.text));
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: TextField(
+                  controller: _contentController,
+                ),
               ),
             ],
           ),

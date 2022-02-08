@@ -60,6 +60,9 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
     return Container(
       padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
       child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+        ),
         child: const Text('目標金額を設定'),
         onPressed: setInitialStateDialogWidget,
       ),
@@ -73,6 +76,9 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
           return AlertDialog(
             title: const Text('目標金額'),
             content: TextField(
+              decoration: const InputDecoration(
+                suffix: Text('円'),
+              ),
               keyboardType: TextInputType.number,
               controller: _aimMoneyController,
             ),
@@ -133,7 +139,7 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
             // none
           }
         },
-        child: const Text('記録を削除'),
+        child: const Text('記録を全消去'),
       ),
     );
   }

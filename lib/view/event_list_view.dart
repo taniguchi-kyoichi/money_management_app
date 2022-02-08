@@ -74,11 +74,7 @@ class _EventListAppState extends ConsumerState<EventListApp> {
         leading: Text('${todoItem.createdAt.month}月${todoItem.createdAt.day}日'),
         trailing: IconButton(
           icon: const Icon(Icons.delete),
-          onPressed: () async {
-            await _databaseController.deleteTodoItem(todoItem);
-            _updateUI();
-            _viewModel.deleteItem(todoItem);
-          },
+          onPressed: () async => deleteConfirmDialog(todoItem),
         ),
         onTap: () => Navigator.push(
               context,
@@ -90,6 +86,36 @@ class _EventListAppState extends ConsumerState<EventListApp> {
                 _updateUI();
               });
             }));
+  }
+
+  Future<Widget?> deleteConfirmDialog(TodoItem todoItem) async {
+    var result = await showDialog<int>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('${todoItem.createdAt.month}月${todoItem.createdAt.day}日 ${todoItem.price}円\n${todoItem.content}'),
+          content: const Text('本当に削除しますか？'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(1),
+              child: const Text('キャンセル'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(0),
+              child: const Text('削除する'),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == 0) {
+      await _databaseController.deleteTodoItem(todoItem);
+      _updateUI();
+      _viewModel.deleteItem(todoItem);
+    } else {
+      // none
+    }
   }
 
   Future<bool> _initUI() async {

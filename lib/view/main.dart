@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/View/root_tab_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 
 void main() {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  //向き指定
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,//縦固定
+  ]);
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
