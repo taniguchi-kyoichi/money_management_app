@@ -5,7 +5,6 @@ import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/model/my_shared_preferences.dart';
 import 'package:money_management_app/view_model/view_model.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
 
 class HomeApp extends ConsumerStatefulWidget {
@@ -58,7 +57,6 @@ class _HomeAppState extends ConsumerState<HomeApp> {
   }
 
   final DatabaseController _databaseController = DatabaseController();
-  late Database _db;
 
   int _cash = 0;
   String _content = '';

@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view/edit_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
-import 'package:sqflite/sqflite.dart';
 
 class EventListApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -30,7 +28,6 @@ class _EventListAppState extends ConsumerState<EventListApp> {
   }
 
   final DatabaseController _databaseController = DatabaseController();
-  late Database _db;
   List<TodoItem> _todoList = [];
 
   @override
@@ -44,12 +41,10 @@ class _EventListAppState extends ConsumerState<EventListApp> {
           );
         }
         return Scaffold(
-          body: Consumer(
-            builder: (context, ref, child) => ListView(
-              children: _todoList
-                  .map((TodoItem todo) => _itemToListTile(todo))
-                  .toList(),
-            ),
+          body: ListView(
+            children: _todoList
+                .map((TodoItem todo) => _itemToListTile(todo))
+                .toList(),
           ),
         );
       },
@@ -60,7 +55,6 @@ class _EventListAppState extends ConsumerState<EventListApp> {
     await _databaseController.getTodoItems();
     setState(() {
       _todoList = _databaseController.todos;
-      _db = _databaseController.db;
     });
   }
 
@@ -94,7 +88,8 @@ class _EventListAppState extends ConsumerState<EventListApp> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${todoItem.createdAt.month}月${todoItem.createdAt.day}日 ${todoItem.price}円\n${todoItem.content}'),
+          title: Text(
+              '${todoItem.createdAt.month}月${todoItem.createdAt.day}日 ${todoItem.price}円\n${todoItem.content}'),
           content: const Text('本当に削除しますか？'),
           actions: <Widget>[
             TextButton(
@@ -120,7 +115,6 @@ class _EventListAppState extends ConsumerState<EventListApp> {
 
   Future<bool> _initUI() async {
     await _databaseController.asyncInit();
-    _db = _databaseController.db;
     _todoList = _databaseController.todos;
 
     return true;

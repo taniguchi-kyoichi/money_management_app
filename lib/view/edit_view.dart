@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view_model/view_model.dart';
-import 'package:sqflite/sqflite.dart';
 
 class EditView extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -26,7 +24,6 @@ class _EditViewState extends ConsumerState<EditView> {
   late TextEditingController _cashController;
   late TextEditingController _contentController;
   final DatabaseController _databaseController = DatabaseController();
-  late Database _db;
 
   @override
   void initState() {
@@ -39,7 +36,6 @@ class _EditViewState extends ConsumerState<EditView> {
 
     Future(() async {
       await _databaseController.initDb();
-      _db = _databaseController.db;
     });
   }
 
