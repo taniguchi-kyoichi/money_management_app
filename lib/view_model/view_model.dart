@@ -25,16 +25,16 @@ class ViewModel {
     _ref.watch(aimMoneyProvider.state).state = data;
   }
 
-  void addItem(TodoItem todoItem) async {
+  void addItem(ExpenseItem expenseItem) async {
     _ref.watch(availableMoneyProvider.state).state =
-        _ref.watch(availableMoneyProvider) - todoItem.price;
+        _ref.watch(availableMoneyProvider) - expenseItem.price;
     _preferences
         .setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
   }
 
-  void deleteItem(TodoItem todoItem) async {
+  void deleteItem(ExpenseItem expenseItem) async {
     _ref.watch(availableMoneyProvider.state).state =
-        _ref.watch(availableMoneyProvider) + todoItem.price;
+        _ref.watch(availableMoneyProvider) + expenseItem.price;
     _preferences
         .setAvailableMoneyPref(_ref.watch(availableMoneyProvider.state).state);
   }

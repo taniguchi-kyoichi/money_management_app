@@ -68,7 +68,7 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
     );
   }
 
-  Future<Widget?> setInitialStateDialogWidget() async {
+  Future<void> setInitialStateDialogWidget() async {
     var result = await showDialog<int>(
         context: context,
         builder: (BuildContext context) {

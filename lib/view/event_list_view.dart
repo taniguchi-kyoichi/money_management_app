@@ -28,7 +28,7 @@ class _EventListAppState extends ConsumerState<EventListApp> {
   }
 
   final DatabaseController _databaseController = DatabaseController();
-  List<TodoItem> _todoList = [];
+  List<ExpenseItem> _expenseItemList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +42,8 @@ class _EventListAppState extends ConsumerState<EventListApp> {
         }
         return Scaffold(
           body: ListView(
-            children: _todoList
-                .map((TodoItem todo) => _itemToListTile(todo))
+            children: _expenseItemList
+                .map((ExpenseItem expense) => _itemToListTile(expense))
                 .toList(),
           ),
         );
@@ -52,28 +52,28 @@ class _EventListAppState extends ConsumerState<EventListApp> {
   }
 
   Future<void> _updateUI() async {
-    await _databaseController.getTodoItems();
+    await _databaseController.getExpenseItems();
     setState(() {
-      _todoList = _databaseController.todos;
+      _expenseItemList = _databaseController.expenseItemList;
     });
   }
 
-  ListTile _itemToListTile(TodoItem todoItem) {
+  ListTile _itemToListTile(ExpenseItem expenseItem) {
     return ListTile(
         title: Text(
-          '${todoItem.price}円',
+          '${expenseItem.price}円',
         ),
-        subtitle: Text(todoItem.content),
+        subtitle: Text(expenseItem.content),
         isThreeLine: true,
-        leading: Text('${todoItem.createdAt.month}月${todoItem.createdAt.day}日'),
+        leading: Text('${expenseItem.createdAt.month}月${expenseItem.createdAt.day}日'),
         trailing: IconButton(
           icon: const Icon(Icons.delete),
-          onPressed: () async => deleteConfirmDialog(todoItem),
+          onPressed: () async => deleteConfirmDialog(expenseItem),
         ),
         onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EditView(ViewModel(), todoItem),
+                builder: (context) => EditView(ViewModel(), expenseItem),
               ),
             ).then((value) {
               setState(() {
@@ -82,14 +82,14 @@ class _EventListAppState extends ConsumerState<EventListApp> {
             }));
   }
 
-  Future<Widget?> deleteConfirmDialog(TodoItem todoItem) async {
+  Future<void> deleteConfirmDialog(ExpenseItem expenseItem) async {
     var result = await showDialog<int>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-              '${todoItem.createdAt.month}月${todoItem.createdAt.day}日 ${todoItem.price}円\n${todoItem.content}'),
+              '${expenseItem.createdAt.month}月${expenseItem.createdAt.day}日 ${expenseItem.price}円\n${expenseItem.content}'),
           content: const Text('本当に削除しますか？'),
           actions: <Widget>[
             TextButton(
@@ -105,9 +105,9 @@ class _EventListAppState extends ConsumerState<EventListApp> {
       },
     );
     if (result == 0) {
-      await _databaseController.deleteTodoItem(todoItem);
+      await _databaseController.deleteExpenseItem(expenseItem);
       _updateUI();
-      _viewModel.deleteItem(todoItem);
+      _viewModel.deleteItem(expenseItem);
     } else {
       // none
     }
@@ -115,7 +115,7 @@ class _EventListAppState extends ConsumerState<EventListApp> {
 
   Future<bool> _initUI() async {
     await _databaseController.asyncInit();
-    _todoList = _databaseController.todos;
+    _expenseItemList = _databaseController.expenseItemList;
 
     return true;
   }

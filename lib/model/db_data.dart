@@ -1,4 +1,4 @@
-class TodoItem {
+class ExpenseItem {
   final int? id;
   final int price;
   final String content;
@@ -6,14 +6,14 @@ class TodoItem {
   // SQLite doesn't supprot DateTime. Store them as INTEGER (millisSinceEpoch).
   final DateTime createdAt;
 
-  TodoItem({
+  ExpenseItem({
     this.id,
     required this.price,
     required this.content,
     required this.createdAt,
   });
 
-  TodoItem.fromJsonMap(Map<String, dynamic> map)
+  ExpenseItem.fromJsonMap(Map<String, dynamic> map)
       : id = map['id'] as int,
         price = map['price'] as int,
         content = map['content'] as String,

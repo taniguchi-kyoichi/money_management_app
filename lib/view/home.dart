@@ -138,13 +138,13 @@ class _HomeAppState extends ConsumerState<HomeApp> {
       _cashController.text = '';
       _contentController.text = '';
 
-      TodoItem todoItem = TodoItem(
+      ExpenseItem expenseItem = ExpenseItem(
         price: _cash,
         content: _content,
         createdAt: DateTime.now(),
       );
-      await _databaseController.addTodoItem(todoItem);
-      _viewModel.addItem(todoItem);
+      await _databaseController.addExpenseItem(expenseItem);
+      _viewModel.addItem(expenseItem);
     } else {
       // none
     }

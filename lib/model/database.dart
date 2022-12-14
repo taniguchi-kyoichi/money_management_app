@@ -10,7 +10,7 @@ class DatabaseController {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   late Database db;
-  List<TodoItem> todos = [];
+  List<ExpenseItem> expenseItemList = [];
 
   // Opens a db local file. Creates the db table if it's not yet created.
   Future<void> initDb() async {
@@ -37,16 +37,16 @@ class DatabaseController {
   }
 
   // Retrieves rows from the db table.
-  Future<void> getTodoItems() async {
+  Future<void> getExpenseItems() async {
     final List<Map<String, dynamic>> jsons =
         await db.rawQuery('SELECT * FROM $kDbTableName');
-    todos = jsons.map((json) => TodoItem.fromJsonMap(json)).toList();
+    expenseItemList = jsons.map((json) => ExpenseItem.fromJsonMap(json)).toList();
   }
 
   // Inserts records to the db table.
   // Note we don't need to explicitly set the primary key (id), it'll auto
   // increment.
-  Future<void> addTodoItem(TodoItem todo) async {
+  Future<void> addExpenseItem(ExpenseItem expenseItem) async {
     await db.transaction(
       (Transaction txn) async {
         await txn.rawInsert(
@@ -55,31 +55,31 @@ class DatabaseController {
             (price, content, createdAt)
           VALUES
             (
-              "${todo.price}",
-              "${todo.content}",
-              ${todo.createdAt.millisecondsSinceEpoch}
+              "${expenseItem.price}",
+              "${expenseItem.content}",
+              ${expenseItem.createdAt.millisecondsSinceEpoch}
             )''',
         );
       },
     );
   }
 
-  Future<void> changePrice(TodoItem oldItem, int price) async {
-    TodoItem newTodo = TodoItem(
+  Future<void> changePrice(ExpenseItem oldItem, int price) async {
+    ExpenseItem newExpense = ExpenseItem(
         id: oldItem.id,
         price: price,
         content: oldItem.content,
         createdAt: oldItem.createdAt);
-    await db.update(kDbTableName, newTodo.toJsonMap(),
+    await db.update(kDbTableName, newExpense.toJsonMap(),
         where: 'id = ?', whereArgs: [oldItem.id]);
   }
 
   // Deletes records in the db table.
-  Future<void> deleteTodoItem(TodoItem todo) async {
+  Future<void> deleteExpenseItem(ExpenseItem expense) async {
     await db.rawDelete(
       '''
         DELETE FROM $kDbTableName
-        WHERE id = ${todo.id}
+        WHERE id = ${expense.id}
       ''',
     );
   }
@@ -89,7 +89,7 @@ class DatabaseController {
     // cf. https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
     await _memoizer.runOnce(() async {
       await initDb();
-      await getTodoItems();
+      await getExpenseItems();
     });
   }
 
