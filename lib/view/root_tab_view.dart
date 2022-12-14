@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/View/home.dart';
 import 'package:money_management_app/View/event_list_view.dart';
 import 'package:money_management_app/configs/constants.dart';
+import 'package:money_management_app/extension/ios_widget_manager.dart';
 import 'package:money_management_app/view/settings_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,6 +38,9 @@ class _RootAppState extends ConsumerState<RootApp> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     result = prefs.getInt(Constants.availableMoneyPref) ?? _viewModel.aimMoney;
     _viewModel.setInit(result);
+
+    // iosウィジェットを初期化
+    IosWidgetManager().initMethodChannel();
   }
 
   @override
