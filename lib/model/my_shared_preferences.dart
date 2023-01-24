@@ -33,4 +33,21 @@ class MySharedPreferences{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(Constants.currentTimePref, newData);
   }
+
+  Future<bool> getIsNoAdsPurchasePref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? res = prefs.getBool(Constants.isNoAdsPurchasePref);
+    if (res != null) {
+      return res;
+    } else {
+      await setIsNoAdsPurchasePref(false);
+      return false;
+    }
+
+  }
+
+  setIsNoAdsPurchasePref(bool newData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constants.isNoAdsPurchasePref, newData);
+  }
 }

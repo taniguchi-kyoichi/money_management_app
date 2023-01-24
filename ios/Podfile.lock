@@ -55,6 +55,12 @@ PODS:
   - path_provider_ios (0.0.1):
     - Flutter
   - PromisesObjC (2.1.1)
+  - purchases_flutter (4.7.0):
+    - Flutter
+    - PurchasesHybridCommon (= 4.8.0)
+  - PurchasesHybridCommon (4.8.0):
+    - RevenueCat (= 4.16.0)
+  - RevenueCat (4.16.0)
   - shared_preferences_ios (0.0.1):
     - Flutter
   - sqflite (0.0.2):
@@ -65,6 +71,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
@@ -77,6 +84,8 @@ SPEC REPOS:
     - GoogleUtilities
     - nanopb
     - PromisesObjC
+    - PurchasesHybridCommon
+    - RevenueCat
 
 EXTERNAL SOURCES:
   Flutter:
@@ -85,6 +94,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
+  purchases_flutter:
+    :path: ".symlinks/plugins/purchases_flutter/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sqflite:
@@ -101,9 +112,12 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  purchases_flutter: 3df2ac346e0850e2bd37c78a69ed9c35cd0fce0a
+  PurchasesHybridCommon: bd1e1d3476afd3f95332b0ae160e4ce1bd1efd99
+  RevenueCat: c12e14f5e3dc5732db6d5095ac4ce6ff08d7eeb0
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
 
-PODFILE CHECKSUM: c1aba4094499ab3e40b88317ed59ba12836a6ff8
+PODFILE CHECKSUM: 3b2fbb1f950c8a8a6f4700b1990f8d9d82705949
 
 COCOAPODS: 1.11.3

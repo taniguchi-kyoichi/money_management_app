@@ -13,6 +13,11 @@ class ViewModel {
     _ref = ref;
   }
 
+  WidgetRef getRef() {
+    return _ref;
+  }
+
+
   get availableMoney => _ref.watch(availableMoneyProvider).toInt();
 
   get aimMoney => _ref.watch(aimMoneyProvider).toInt();

@@ -6,14 +6,15 @@ import 'package:intl/intl.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/model/my_shared_preferences.dart';
+import 'package:money_management_app/model/noads_purchase.dart';
 import 'package:money_management_app/view/AdsDeleteDialog.dart';
+import 'package:money_management_app/view_model/provider.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 
 class HomeApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
-  final BannerAd myBanner;
 
-  const HomeApp({Key? key, required this.viewModel, required this.myBanner})
+  const HomeApp({Key? key, required this.viewModel})
       : super(key: key);
 
   @override
@@ -22,7 +23,6 @@ class HomeApp extends ConsumerStatefulWidget {
 
 class _HomeAppState extends ConsumerState<HomeApp> {
   late ViewModel _viewModel;
-  late BannerAd _bannerAd;
   final MySharedPreferences _preferences = MySharedPreferences();
   final DateTime _currentTime = DateTime.now();
   int _leftDays = 0;
@@ -31,13 +31,13 @@ class _HomeAppState extends ConsumerState<HomeApp> {
   void initState() {
     super.initState();
     _viewModel = widget.viewModel;
-    _bannerAd = widget.myBanner;
     _viewModel.setRef(ref);
     _leftDays = DateTime(_currentTime.year, _currentTime.month + 1, 0).day -
         _currentTime.day +
         1;
 
     Future(() async {
+      await NoAdsPurchase().loadPurchase(_viewModel.getRef());
       await _databaseController.initDb();
       await compareDate();
     });
@@ -70,13 +70,7 @@ class _HomeAppState extends ConsumerState<HomeApp> {
 
   @override
   Widget build(BuildContext context) {
-    final AdWidget adWidget = AdWidget(ad: _bannerAd);
-    final Container adContainer = Container(
-      alignment: Alignment.center,
-      width: _bannerAd.size.width.toDouble(),
-      height: _bannerAd.size.height.toDouble(),
-      child: adWidget,
-    );
+
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -132,39 +126,28 @@ class _HomeAppState extends ConsumerState<HomeApp> {
               ],
             ),
           ),
-          Center(
-            child: Column(
-              children: [
-
-                Padding(
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            showDialog<void>(
-                                context: context,
-                                builder: (_) {
-                                  return AdsDeleteDialog();
-                                });
-                          },
-                          child: Text("広告を削除", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                        ),
-                        width: 150,
-                        height: 50,
-                      )),
-                  padding: EdgeInsets.all(20),
-                ),
-                Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.zero,
-                )),
-                SizedBox(
-                  height: 30,
-                ),
-                adContainer,
-              ],
-            ),
+          ref.watch(isNoAdsPurchaseProvider) ? const Padding(padding: EdgeInsets.zero) : Column(
+            children: [
+              Padding(
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showDialog<void>(
+                              context: context,
+                              builder: (_) {
+                                return AdsDeleteDialog();
+                              });
+                        },
+                        child: const Text("広告を削除", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                      ),
+                      width: 150,
+                      height: 50,
+                    )),
+                padding: EdgeInsets.all(20),
+              ),
+            ],
           ),
         ],
       ),

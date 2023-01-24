@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view/edit_view.dart';
@@ -8,8 +9,9 @@ import 'package:money_management_app/view_model/view_model.dart';
 class EventListApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
 
+
   const EventListApp(
-    this.viewModel, {
+    this.viewModel,{
     Key? key,
   }) : super(key: key);
 
