@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_management_app/View/home.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:money_management_app/View/event_list_view.dart';
 import 'package:money_management_app/configs/constants.dart';
 import 'package:money_management_app/extension/ios_widget_manager.dart';
 import 'package:money_management_app/view/settings_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'home.dart';
 
 class RootApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -28,10 +30,20 @@ class _RootAppState extends ConsumerState<RootApp> {
     super.initState();
     _viewModel = widget.viewModel;
     _viewModel.setRef(ref);
+    myBanner.load();
     Future(() async {
       await _getPrefItems();
     });
   }
+
+  final BannerAd myBanner = BannerAd(
+    adUnitId: 'ca-app-pub-3940256099942544/2934735716',
+    size: AdSize.banner,
+    request: request,
+    listener: const BannerAdListener(),
+  );
+
+  static const AdRequest request = AdRequest();
 
   _getPrefItems() async {
     int result = 0;
@@ -46,7 +58,7 @@ class _RootAppState extends ConsumerState<RootApp> {
   @override
   Widget build(BuildContext context) {
     final _kTabPages = <Widget>[
-      HomeApp(ViewModel()),
+      HomeApp(viewModel: ViewModel(), myBanner: myBanner),
       EventListApp(ViewModel()),
       SettingsApp(ViewModel()),
     ];
@@ -58,6 +70,7 @@ class _RootAppState extends ConsumerState<RootApp> {
     return DefaultTabController(
       length: _kTabs.length,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           flexibleSpace: Column(
             mainAxisAlignment: MainAxisAlignment.end,
