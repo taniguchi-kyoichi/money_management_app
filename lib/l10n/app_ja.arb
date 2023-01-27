@@ -1,0 +1,50 @@
+{
+  "@@locale": "ja",
+
+  "home": "ホーム",
+  "history": "履歴",
+  "settings": "設定",
+  "deleteTheAds": "広告を削除",
+  "adFree": "広告非表示",
+  "purchaseAdHidingOption": "広告非表示オプションを購入する",
+  "restoreTheAdHidingOption": "広告非表示オプションを復元する",
+  "successRestore": "復元が完了しました。",
+  "receiptNotFound": "過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。",
+  "priceAndLeftDays": "残り{days}日で{price}円",
+  "@priceAndLeftDays": {
+    "description": "price and left days",
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "example": "30000"
+      },
+      "days": {
+        "type": "String",
+        "example": "30"
+      }
+    }
+  },
+  "usedMoney": "使った金額",
+  "content": "内容",
+  "save": "保存",
+  "price": "{price}円",
+  "@price": {
+    "description": "price and appropriate currency",
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "example": "20000"
+      }
+    }
+  },
+  "currency": "円",
+  "editing": "編集",
+  "settingAimMoney": "目標金額を設定",
+  "deleteAllRecords": "記録を全消去",
+  "cancel": "キャンセル",
+  "oK": "OK",
+  "aimMoney": "目標金額",
+  "confirmation": "確認",
+  "confirmAllDelete": "本当に削除しますか？",
+  "delete": "削除する"
+}
