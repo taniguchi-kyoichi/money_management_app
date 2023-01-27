@@ -5,6 +5,9 @@ import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view/edit_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../extension/ios_widget_manager.dart';
 
 class EventListApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -63,11 +66,11 @@ class _EventListAppState extends ConsumerState<EventListApp> {
   ListTile _itemToListTile(ExpenseItem expenseItem) {
     return ListTile(
         title: Text(
-          '${expenseItem.price}円',
+          L10n.of(context)!.price(expenseItem.price),
         ),
         subtitle: Text(expenseItem.content),
         isThreeLine: true,
-        leading: Text('${expenseItem.createdAt.month}月${expenseItem.createdAt.day}日'),
+        leading: Text('${expenseItem.createdAt.month}/${expenseItem.createdAt.day}'),
         trailing: IconButton(
           icon: const Icon(Icons.delete),
           onPressed: () async => deleteConfirmDialog(expenseItem),
@@ -91,16 +94,16 @@ class _EventListAppState extends ConsumerState<EventListApp> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-              '${expenseItem.createdAt.month}月${expenseItem.createdAt.day}日 ${expenseItem.price}円\n${expenseItem.content}'),
-          content: const Text('本当に削除しますか？'),
+              '${expenseItem.createdAt.month}/${expenseItem.createdAt.day} ${L10n.of(context)!.price(expenseItem.price)}\n${expenseItem.content}'),
+          content: Text(L10n.of(context)!.confirmAllDelete),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(1),
-              child: const Text('キャンセル'),
+              child: Text(L10n.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(0),
-              child: const Text('削除する'),
+              child: Text(L10n.of(context)!.delete),
             ),
           ],
         );
@@ -109,7 +112,8 @@ class _EventListAppState extends ConsumerState<EventListApp> {
     if (result == 0) {
       await _databaseController.deleteExpenseItem(expenseItem);
       _updateUI();
-      _viewModel.deleteItem(expenseItem);
+      await _viewModel.deleteItem(expenseItem);
+      await IosWidgetManager().invokeWidget(context, ref);
     } else {
       // none
     }

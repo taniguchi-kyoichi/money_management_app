@@ -1,0 +1,56 @@
+{
+  "@@locale": "en",
+
+  "home": "Home",
+  "history": "History",
+  "settings": "Settings",
+  "deleteTheAds": "Remove Ads",
+  "adFree": "ad-free",
+  "purchaseAdHidingOption": "Purchase Ad Hiding Option",
+  "restoreTheAdHidingOption": "Restore the ad hiding option",
+  "successRestore": "Restoration is complete.",
+  "receiptNotFound": "We could not find any past purchase information. Please check your account information.",
+  "priceAndLeftDays": "{price} with {days} days left",
+  "@priceAndLeftDays": {
+    "description": "price and left days",
+    "placeholders": {
+      "price": {
+          "type": "int",
+          "format": "simpleCurrency",
+          "optionalParameters": {
+            "decimalDigits": 0
+          }
+      },
+      "days": {
+        "type": "String",
+        "example": "30"
+      }
+    }
+  },
+  "usedMoney": "Amount of money spent",
+  "content": "content",
+  "save": "save",
+  "price": "{price}",
+  "@price": {
+    "description": "price and appropriate currency",
+    "placeholders": {
+      "price": {
+          "type": "int",
+          "format": "simpleCurrency",
+          "optionalParameters": {
+            "decimalDigits": 0
+          }
+      }
+    }
+  },
+  "currency": "$",
+  "editing": "Editing",
+  "settingAimMoney": "Set a target amount",
+  "deleteAllRecords": "Delete all records",
+  "cancel": "cancel",
+  "oK": "OK",
+  "aimMoney": "Target Amount",
+  "confirmation": "confirmation",
+  "confirmAllDelete": "Do you really want to delete it?",
+  "delete": "Delete"
+}

@@ -4,6 +4,10 @@ import 'package:money_management_app/configs/constants.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/my_shared_preferences.dart';
 import 'package:money_management_app/view_model/view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
+import '../extension/ios_widget_manager.dart';
 
 class SettingsApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -62,7 +66,7 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
         ),
-        child: const Text('目標金額を設定'),
+        child: Text(L10n.of(context)!.settingAimMoney),
         onPressed: setInitialStateDialogWidget,
       ),
     );
@@ -73,10 +77,10 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('目標金額'),
+            title: Text(L10n.of(context)!.aimMoney),
             content: TextField(
-              decoration: const InputDecoration(
-                suffix: Text('円'),
+              decoration: InputDecoration(
+                suffix: Text(L10n.of(context)!.currency),
               ),
               keyboardType: TextInputType.number,
               controller: _aimMoneyController,
@@ -84,20 +88,21 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(0),
-                child: const Text('キャンセル'),
+                child: Text(L10n.of(context)!.cancel),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(1),
-                child: const Text('OK'),
+                child: Text(L10n.of(context)!.oK),
               ),
             ],
           );
         });
     if (result == 1) {
       int newData = int.parse(_aimMoneyController.text);
-      _viewModel.updateAvailableMoneyProvider(newData, _viewModel.aimMoney);
+      await _viewModel.updateAvailableMoneyProvider(newData, _viewModel.aimMoney);
       _viewModel.setAimMoney(newData);
-      _preferences.setAimMoneyPref(newData);
+      await _preferences.setAimMoneyPref(newData);
+      await IosWidgetManager().invokeWidget(context, ref);
     } else {
       // none
     }
@@ -116,29 +121,30 @@ class _SettingsAppState extends ConsumerState<SettingsApp> {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('確認'),
-                content: const Text('本当に削除しますか？'),
+                title: Text(L10n.of(context)!.confirmation),
+                content: Text(L10n.of(context)!.confirmAllDelete),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(1),
-                    child: const Text('キャンセル'),
+                    child: Text(L10n.of(context)!.cancel),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(0),
-                    child: const Text('削除する'),
+                    child: Text(L10n.of(context)!.delete),
                   ),
                 ],
               );
             },
           );
           if (result == 0) {
-            _viewModel.resetRef();
-            _databaseController.deleteAll();
+            await _viewModel.resetRef();
+            await _databaseController.deleteAll();
+            await IosWidgetManager().invokeWidget(context, ref);
           } else {
             // none
           }
         },
-        child: const Text('記録を全消去'),
+        child: Text(L10n.of(context)!.deleteAllRecords),
       ),
     );
   }

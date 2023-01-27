@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/View/root_tab_view.dart';
 import 'package:money_management_app/view_model/view_model.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 void main() {
@@ -26,6 +27,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'money management app',
+      localizationsDelegates: L10n.localizationsDelegates,
+      supportedLocales: L10n.supportedLocales,
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),

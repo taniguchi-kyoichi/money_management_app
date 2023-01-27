@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../view_model/provider.dart';
 import 'home.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class RootApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -39,7 +41,8 @@ class _RootAppState extends ConsumerState<RootApp> {
 
   final BannerAd myBanner = BannerAd(
     adUnitId: 'ca-app-pub-4395078331214572/5958752150',
-    size: AdSize.banner,
+    //adUnitId: "ca-app-pub-3940256099942544/2934735716",
+    size: AdSize.fullBanner,
     request: request,
     listener: const BannerAdListener(),
   );
@@ -50,10 +53,9 @@ class _RootAppState extends ConsumerState<RootApp> {
     int result = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     result = prefs.getInt(Constants.availableMoneyPref) ?? _viewModel.aimMoney;
-    _viewModel.setInit(result);
+    await _viewModel.setInit(result);
 
-    // iosウィジェットを初期化
-    IosWidgetManager().initMethodChannel();
+
   }
 
   @override
@@ -64,9 +66,9 @@ class _RootAppState extends ConsumerState<RootApp> {
       SettingsApp(ViewModel()),
     ];
     final _kTabs = <Tab>[
-      const Tab(icon: Icon(Icons.home), text: 'ホーム',),
-      const Tab(icon: Icon(Icons.history), text: '履歴'),
-      const Tab(icon: Icon(Icons.settings), text: '設定'),
+      Tab(icon: const Icon(Icons.home), text: L10n.of(context)!.home,),
+      Tab(icon: const Icon(Icons.history), text: L10n.of(context)!.history),
+      Tab(icon: const Icon(Icons.settings), text: L10n.of(context)!.settings),
     ];
     return DefaultTabController(
       length: _kTabs.length,
@@ -89,7 +91,7 @@ class _RootAppState extends ConsumerState<RootApp> {
               TabBarView(
                 children: _kTabPages,
               ),
-              AdStack(myBanner),
+             SafeArea(child: adStack(myBanner))
             ],
           ),
         ),
@@ -97,7 +99,7 @@ class _RootAppState extends ConsumerState<RootApp> {
     );
   }
 
-  Widget AdStack(_bannerAd) {
+  Widget adStack(_bannerAd) {
     final AdWidget adWidget = AdWidget(ad: _bannerAd);
     final Container adContainer = Container(
       alignment: Alignment.center,

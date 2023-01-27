@@ -1,15 +1,19 @@
+import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/model/my_shared_preferences.dart';
-import 'package:money_management_app/model/noads_purchase.dart';
-import 'package:money_management_app/view/AdsDeleteDialog.dart';
+import 'package:money_management_app/model/no_ads_purchase.dart';
+import 'package:money_management_app/view/ads_delete_dialog.dart';
 import 'package:money_management_app/view_model/provider.dart';
 import 'package:money_management_app/view_model/view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
+import '../extension/ios_widget_manager.dart';
 
 class HomeApp extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -36,14 +40,18 @@ class _HomeAppState extends ConsumerState<HomeApp> {
         _currentTime.day +
         1;
 
+
     Future(() async {
       await NoAdsPurchase().loadPurchase(_viewModel.getRef());
-      await _databaseController.initDb();
       await compareDate();
+      await _databaseController.initDb();
+      // iosウィジェットを初期化
+      await IosWidgetManager().invokeWidget(context, ref);
     });
   }
 
   Future<void> compareDate() async {
+    _viewModel.setLeftDays(_leftDays);
     DateTime previousTime;
     try {
       previousTime =
@@ -54,9 +62,11 @@ class _HomeAppState extends ConsumerState<HomeApp> {
 
     if (previousTime.month != _currentTime.month) {
       _viewModel.setInit(_viewModel.aimMoney);
+
     } else {
       // none
     }
+
   }
 
   final DatabaseController _databaseController = DatabaseController();
@@ -65,8 +75,6 @@ class _HomeAppState extends ConsumerState<HomeApp> {
   String _content = '';
   final _cashController = TextEditingController();
   final _contentController = TextEditingController();
-
-  final numberFormatter = NumberFormat("#,###");
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +88,11 @@ class _HomeAppState extends ConsumerState<HomeApp> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(0),
+                const Padding(
+                  padding: EdgeInsets.all(0),
                 ),
                 Text(
-                  '残り$_leftDays日で${numberFormatter.format(_viewModel.availableMoney)}円',
+                  L10n.of(context)!.priceAndLeftDays(_viewModel.availableMoney,_leftDays.toString()),
                   style: const TextStyle(fontSize: 30),
                 ),
                 const Padding(padding: EdgeInsets.all(20)),
@@ -92,9 +100,9 @@ class _HomeAppState extends ConsumerState<HomeApp> {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: TextField(
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: '使った金額',
-                      suffix: Text('円'),
+                    decoration: InputDecoration(
+                      labelText: L10n.of(context)!.usedMoney,
+                      suffix: Text(L10n.of(context)!.currency),
                     ),
                     controller: _cashController,
                     inputFormatters: <TextInputFormatter>[
@@ -105,14 +113,14 @@ class _HomeAppState extends ConsumerState<HomeApp> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
                   child: TextField(
-                    decoration: const InputDecoration(labelText: '内容'),
+                    decoration: InputDecoration(labelText: L10n.of(context)!.content),
                     controller: _contentController,
                   ),
                 ),
                 OutlinedButton(
                   onPressed: buttonTapped,
-                  child: const Text('保存',
-                      style: TextStyle(
+                  child: Text(L10n.of(context)!.save,
+                      style: const TextStyle(
                         fontSize: 15,
                       )),
                   style: OutlinedButton.styleFrom(
@@ -137,15 +145,15 @@ class _HomeAppState extends ConsumerState<HomeApp> {
                           showDialog<void>(
                               context: context,
                               builder: (_) {
-                                return AdsDeleteDialog();
+                                return const AdsDeleteDialog();
                               });
                         },
-                        child: const Text("広告を削除", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                        child: Text(L10n.of(context)!.deleteTheAds, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                       ),
                       width: 150,
                       height: 50,
                     )),
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
               ),
             ],
           ),
@@ -167,7 +175,13 @@ class _HomeAppState extends ConsumerState<HomeApp> {
         createdAt: DateTime.now(),
       );
       await _databaseController.addExpenseItem(expenseItem);
-      _viewModel.addItem(expenseItem);
+      await _viewModel.addItem(expenseItem);
+      final int saveCount = await MySharedPreferences().getSaveCountPref();
+
+      if (saveCount % 5 == 4) {
+        await AppReview.requestReview;
+      }
+      await IosWidgetManager().invokeWidget(context, ref);
     } else {
       // none
     }

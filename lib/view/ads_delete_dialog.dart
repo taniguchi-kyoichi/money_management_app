@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_management_app/model/noads_purchase.dart';
+import 'package:money_management_app/model/no_ads_purchase.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
 
 class AdsDeleteDialog extends ConsumerStatefulWidget {
   const AdsDeleteDialog({Key? key}) : super(key: key);
@@ -15,8 +18,8 @@ class AdsDeleteDialog extends ConsumerStatefulWidget {
 
 class _AdsDeleteDialogState extends ConsumerState<AdsDeleteDialog> {
   Offerings? _offerings;
-  bool _restoring = false;
 
+  bool _restoring = false;
   @override
   void initState() {
     super.initState();
@@ -57,10 +60,10 @@ class _AdsDeleteDialogState extends ConsumerState<AdsDeleteDialog> {
         final noAdsPackage = offering.getPackage("noAds");
         if (noAdsPackage != null) {
           return SimpleDialog(
-            title: Text('広告非表示'),
+            title: Text(L10n.of(context)!.adFree),
             children: [
               SimpleDialogOption(
-                child: Text('広告非表示オプションを購入する'),
+                child: Text(L10n.of(context)!.purchaseAdHidingOption),
                 onPressed: () async {
                   try {
                     // 購入処理
@@ -87,7 +90,7 @@ class _AdsDeleteDialogState extends ConsumerState<AdsDeleteDialog> {
                 },
               ),
               SimpleDialogOption(
-                child: Text('広告非表示オプションを復元する'),
+                child: Text(L10n.of(context)!.restoreTheAdHidingOption),
                 onPressed: () async {
                   try {
                     setState(() {
@@ -109,11 +112,11 @@ class _AdsDeleteDialogState extends ConsumerState<AdsDeleteDialog> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('確認'),
-                            content: Text('復元が完了しました。'),
+                            title: Text(L10n.of(context)!.confirmation),
+                            content: Text(L10n.of(context)!.successRestore),
                             actions: <Widget>[
                               ElevatedButton(
-                                child: const Text('OK'),
+                                child: Text(L10n.of(context)!.oK),
                                 onPressed: () => Navigator.of(context).pop(1),
                               ),
                             ],
@@ -127,12 +130,12 @@ class _AdsDeleteDialogState extends ConsumerState<AdsDeleteDialog> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('確認'),
+                            title: Text(L10n.of(context)!.oK),
                             content:
-                                Text('過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。'),
+                                Text(L10n.of(context)!.receiptNotFound),
                             actions: <Widget>[
                               ElevatedButton(
-                                child: const Text('OK'),
+                                child: Text(L10n.of(context)!.oK),
                                 onPressed: () => Navigator.of(context).pop(1),
                               ),
                             ],

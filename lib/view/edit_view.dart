@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/view_model/view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
+import '../extension/ios_widget_manager.dart';
 
 class EditView extends ConsumerStatefulWidget {
   final ViewModel viewModel;
@@ -44,21 +48,22 @@ class _EditViewState extends ConsumerState<EditView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: WillPopScope(
-        onWillPop: () {
-          _viewModel.updateAvailableMoneyProvider(
+        onWillPop: () async {
+          await _viewModel.updateAvailableMoneyProvider(
               expenseItem.price, int.parse(_cashController.text));
+          await IosWidgetManager().invokeWidget(context, ref);
           Navigator.of(context).pop();
           return Future.value(false);
         },
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('編集画面'),
+            title: Text(L10n.of(context)!.editing),
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                '${expenseItem.createdAt.month}月${expenseItem.createdAt.day}日',
+                '${expenseItem.createdAt.month}/${expenseItem.createdAt.day}',
                 style: const TextStyle(
                   fontSize: 20,
                   fontStyle: FontStyle.italic,
@@ -67,8 +72,8 @@ class _EditViewState extends ConsumerState<EditView> {
               Container(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: TextField(
-                  decoration: const InputDecoration(
-                    suffix: Text('円'),
+                  decoration: InputDecoration(
+                    suffix: Text(L10n.of(context)!.currency),
                   ),
                   keyboardType: TextInputType.number,
                   controller: _cashController,

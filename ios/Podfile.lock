@@ -1,33 +1,35 @@
 PODS:
+  - app_review (1.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - Google-Mobile-Ads-SDK (9.6.0):
-    - GoogleAppMeasurement (< 10.0, >= 7.0)
+  - Google-Mobile-Ads-SDK (9.14.0):
+    - GoogleAppMeasurement (< 11.0, >= 7.0)
     - GoogleUserMessagingPlatform (>= 1.1)
   - google_mobile_ads (0.0.1):
     - Flutter
-    - Google-Mobile-Ads-SDK (= 9.6.0)
-  - GoogleAppMeasurement (9.6.0):
-    - GoogleAppMeasurement/AdIdSupport (= 9.6.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
-    - GoogleUtilities/MethodSwizzler (~> 7.7)
-    - GoogleUtilities/Network (~> 7.7)
-    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - Google-Mobile-Ads-SDK (~> 9.13)
+  - GoogleAppMeasurement (10.4.0):
+    - GoogleAppMeasurement/AdIdSupport (= 10.4.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (9.6.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 9.6.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
-    - GoogleUtilities/MethodSwizzler (~> 7.7)
-    - GoogleUtilities/Network (~> 7.7)
-    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+  - GoogleAppMeasurement/AdIdSupport (10.4.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.4.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (9.6.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
-    - GoogleUtilities/MethodSwizzler (~> 7.7)
-    - GoogleUtilities/Network (~> 7.7)
-    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+  - GoogleAppMeasurement/WithoutAdIdSupport (10.4.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - GoogleUserMessagingPlatform (2.0.1)
   - GoogleUtilities/AppDelegateSwizzler (7.11.0):
@@ -52,28 +54,37 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - path_provider_ios (0.0.1):
+  - package_info_plus (0.4.5):
     - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - PromisesObjC (2.1.1)
-  - purchases_flutter (4.7.0):
+  - purchases_flutter (4.8.0):
     - Flutter
-    - PurchasesHybridCommon (= 4.8.0)
-  - PurchasesHybridCommon (4.8.0):
-    - RevenueCat (= 4.16.0)
-  - RevenueCat (4.16.0)
-  - shared_preferences_ios (0.0.1):
+    - PurchasesHybridCommon (= 4.10.0)
+  - PurchasesHybridCommon (4.10.0):
+    - RevenueCat (= 4.17.2)
+  - RevenueCat (4.17.2)
+  - shared_preferences_foundation (0.0.1):
     - Flutter
+    - FlutterMacOS
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
+  - url_launcher_ios (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
+  - app_review (from `.symlinks/plugins/app_review/ios`)
   - Flutter (from `Flutter`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
-  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
-  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -88,36 +99,45 @@ SPEC REPOS:
     - RevenueCat
 
 EXTERNAL SOURCES:
+  app_review:
+    :path: ".symlinks/plugins/app_review/ios"
   Flutter:
     :path: Flutter
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
-  path_provider_ios:
-    :path: ".symlinks/plugins/path_provider_ios/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/ios"
   purchases_flutter:
     :path: ".symlinks/plugins/purchases_flutter/ios"
-  shared_preferences_ios:
-    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  app_review: 6f51001269c59a2f4a5b5ae68b7d106401152764
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  Google-Mobile-Ads-SDK: bdf13d37aa77e368510687b5305d4972b4f9e9c7
-  google_mobile_ads: 8d52c91890e95afc0718f810860b25e55394a327
-  GoogleAppMeasurement: 6de2b1a69e4326eb82ee05d138f6a5cb7311bcb1
+  Google-Mobile-Ads-SDK: 4fe6304b771f8467d29978cb790ec1e56e646946
+  google_mobile_ads: 6bfe04d9c9fd5c2a026e6f09ca2d97ae25b78f7e
+  GoogleAppMeasurement: 173fa22ce7d62c29332568e853b39b2525a0e584
   GoogleUserMessagingPlatform: 5f8b30daf181805317b6b985bb51c1ff3beca054
   GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
+  path_provider_foundation: 37748e03f12783f9de2cb2c4eadfaa25fe6d4852
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
-  purchases_flutter: 3df2ac346e0850e2bd37c78a69ed9c35cd0fce0a
-  PurchasesHybridCommon: bd1e1d3476afd3f95332b0ae160e4ce1bd1efd99
-  RevenueCat: c12e14f5e3dc5732db6d5095ac4ce6ff08d7eeb0
-  shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
+  purchases_flutter: 68c500192f462e5e6c754cd93f8caa97668521aa
+  PurchasesHybridCommon: 2c254caadc6b50238a79902c01abec67353b5334
+  RevenueCat: ad2623febfb1303e90a9b77c796dd1b641547096
+  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  url_launcher_ios: ae1517e5e344f5544fb090b079e11f399dfbe4d2
 
-PODFILE CHECKSUM: 3b2fbb1f950c8a8a6f4700b1990f8d9d82705949
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
 COCOAPODS: 1.11.3

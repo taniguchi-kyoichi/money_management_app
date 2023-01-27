@@ -31,19 +31,23 @@ import WidgetKit
 
     private func setUserDefaultsForAppGroup(result: FlutterResult) {
 
-            guard let userDefaults = UserDefaults(suiteName: "group.com.kyoichi.moneyManagementApp") else {
+            guard let userDefaults = UserDefaults(suiteName: "group.com.kyoichi.kousaiboApp") else {
                 return result(FlutterError(code: "UNAVAILABLE",
                                            message: "setUserDefaultsForAppGroup Failed",
                                            details: nil))
             }
 
             let defaults = UserDefaults.standard
-            let availableMoney = defaults.value(forKey: "flutter.AVAILABLE_MONEY_PREF") as? Int
+            let availableMoney = defaults.value(forKey: "flutter.WIDGET_TITLE_PREF") as? String
 
-            userDefaults.setValue(availableMoney, forKey: "AVAILABLE_MONEY_PREF")
+            userDefaults.setValue(availableMoney, forKey: "WIDGET_TITLE_PREF")
+    
 
             if #available(iOS 14.0, *) {
+
+                #if arch(arm64) || arch(i386) || arch(x86_64)
                 WidgetCenter.shared.reloadAllTimelines()
+                #endif
             }
             result(true)
 

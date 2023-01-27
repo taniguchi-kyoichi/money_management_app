@@ -50,4 +50,38 @@ class MySharedPreferences{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constants.isNoAdsPurchasePref, newData);
   }
+
+  Future<String> getWidgetTitlePref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? res = prefs.getString(Constants.widgetTitlePref);
+    if (res != null) {
+      return res;
+    } else {
+      await setWidgetTitlePref("");
+      return "";
+    }
+
+  }
+
+  setWidgetTitlePref(String newData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(Constants.widgetTitlePref, newData);
+  }
+
+  Future<int> getSaveCountPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? res = prefs.getInt("saveCount");
+    if (res != null) {
+      return res;
+    } else {
+      await setSaveCountPref(0);
+      return 0;
+    }
+
+  }
+
+  setSaveCountPref(int newData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("saveCount", newData);
+  }
 }
