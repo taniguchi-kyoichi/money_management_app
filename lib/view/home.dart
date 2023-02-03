@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:money_management_app/model/database.dart';
 import 'package:money_management_app/model/db_data.dart';
 import 'package:money_management_app/model/my_shared_preferences.dart';
@@ -125,7 +126,7 @@ class _HomeAppState extends ConsumerState<HomeApp> {
                       )),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(260, 60),
-                    primary: Colors.blue,
+                    foregroundColor: Colors.blue,
                   ),
                 ),
                 const Padding(
@@ -134,32 +135,44 @@ class _HomeAppState extends ConsumerState<HomeApp> {
               ],
             ),
           ),
-          ref.watch(isNoAdsPurchaseProvider) ? const Padding(padding: EdgeInsets.zero) : Column(
-            children: [
-              Padding(
-                child: Align(
-                    alignment: Alignment.centerRight,
-                    child: SizedBox(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          showDialog<void>(
-                              context: context,
-                              builder: (_) {
-                                return const AdsDeleteDialog();
-                              });
-                        },
-                        child: Text(L10n.of(context)!.deleteTheAds, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                      ),
-                      width: 150,
-                      height: 50,
-                    )),
-                padding: const EdgeInsets.all(20),
-              ),
-            ],
-          ),
+          adsDeleteButton(ref),
         ],
       ),
     );
+  }
+
+  Widget adsDeleteButton(WidgetRef ref) {
+    if (ref.watch(isNoAdsPurchaseProvider)) {
+     return const Padding(padding: EdgeInsets.zero);
+    } else {
+      if (Platform.isIOS) {
+        return Column(
+          children: [
+            Padding(
+              child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog<void>(
+                            context: context,
+                            builder: (_) {
+                              return const AdsDeleteDialog();
+                            });
+                      },
+                      child: Text(L10n.of(context)!.deleteTheAds, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                    ),
+                    width: 150,
+                    height: 50,
+                  )),
+              padding: const EdgeInsets.all(20),
+            ),
+          ],
+        );
+      } else {
+        return const Padding(padding: EdgeInsets.zero);
+      }
+    }
   }
 
   buttonTapped() async {
@@ -179,7 +192,10 @@ class _HomeAppState extends ConsumerState<HomeApp> {
       final int saveCount = await MySharedPreferences().getSaveCountPref();
 
       if (saveCount % 5 == 4) {
-        await AppReview.requestReview;
+        if (Platform.isIOS) {
+          await AppReview.requestReview;
+        }
+
       }
       await IosWidgetManager().invokeWidget(context, ref);
     } else {
