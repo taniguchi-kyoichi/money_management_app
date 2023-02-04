@@ -2,7 +2,7 @@
     package="com.kyoichi.money_management_app">
    <application
 
-        android:label="money_management_app"
+        android:label="Monthsave"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
