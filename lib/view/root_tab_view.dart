@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:money_management_app/configs/constants.dart';
+import 'package:money_management_app/environment.dart';
 import 'package:money_management_app/extension/ios_widget_manager.dart';
 import 'package:money_management_app/view/event_list_view.dart';
 import 'package:money_management_app/view/settings_view.dart';
@@ -40,8 +43,9 @@ class _RootAppState extends ConsumerState<RootApp> {
   }
 
   final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-4395078331214572/5958752150',
+    //adUnitId: 'ca-app-pub-4395078331214572/5958752150',
     //adUnitId: "ca-app-pub-3940256099942544/2934735716",
+    adUnitId: Platform.isIOS ? Environment().iosAdmobBannerUnitID : Environment().androidAdmobBannerUnitID,
     size: AdSize.fullBanner,
     request: request,
     listener: const BannerAdListener(),
@@ -91,7 +95,7 @@ class _RootAppState extends ConsumerState<RootApp> {
               TabBarView(
                 children: _kTabPages,
               ),
-             SafeArea(child: adStack(myBanner))
+             Platform.isIOS ?  SafeArea(child: adStack(myBanner)) : const Padding(padding: EdgeInsets.zero),
             ],
           ),
         ),

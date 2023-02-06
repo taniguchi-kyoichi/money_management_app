@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kyoichi.money_management_app">
    <application
-        android:label="money_management_app"
+
+        android:label="Monthsave"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -30,5 +31,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-4395078331214572~2144133791"/>
+
     </application>
+
 </manifest>

@@ -68,7 +68,7 @@ struct MyWidget: Widget {
     
     func supportedFamilies() -> [WidgetFamily] {
         if #available(iOSApplicationExtension 16.0, *) {
-            return [.accessoryRectangular]
+            return [.accessoryRectangular, .systemSmall]
         } else {
             return [.systemSmall]
         }

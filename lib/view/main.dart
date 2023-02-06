@@ -16,6 +16,10 @@ void main() {
     DeviceOrientation.portraitUp,//縦固定
   ]);
 
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent, // transparent status bar
+  ));
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
